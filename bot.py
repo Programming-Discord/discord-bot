@@ -8,6 +8,7 @@ with open('config.json') as f:
 	file = json.load(f)
 TOKEN = file["TOKEN"]
 bot = commands.Bot(command_prefix="~")
+cogs = {"test"}
 
 @bot.event
 async def on_ready():
@@ -29,7 +30,17 @@ async def ping(ctx):
     message = await ctx.send("checking ping...")
     t2 = time.perf_counter()
     ping = round((t2-t1)*1000)
-    await message.edit(content=f":ping_pong: Pong! `{ping}`ms") 
+    await message.edit(content=f":ping_pong: Pong! `{ping}`ms")
+
+
+if __name__ == "__main__":
+    for extension in cogs:
+        try:
+            bot.load_extension(f"cogs.{extension}")
+            print('Loaded: {}'.format(extension))
+        except Exception as e:
+            exc = '{}: {}'.format(type(e).__name__, e)
+            print('Error on load: {}\n{}'.format(extension, exc))
 
 	
 bot.run(TOKEN)
