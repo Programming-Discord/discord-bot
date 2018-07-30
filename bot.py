@@ -21,16 +21,18 @@ async def on_ready():
 	print('DV: {}'.format(discord.__version__))
 
 @bot.command()
-async def online(ctx):
-	await ctx.send("I am online :D")
-
+async def help(ctx):
+	embed=discord.Embed(title="Help", color=discord.Color.blurple())
+	embed.description = "Only command as of now is ~ping"
+	await ctx.send(embed=embed)    
+	
 @bot.command()
 async def ping(ctx):
-    t1 = time.perf_counter()
-    message = await ctx.send("checking ping...")
-    t2 = time.perf_counter()
-    ping = round((t2-t1)*1000)
-    await message.edit(content=f":ping_pong: Pong! `{ping}`ms")
+    	t1 = time.perf_counter()
+    	message = await ctx.send("checking ping...")
+    	t2 = time.perf_counter()
+    	ping = round((t2-t1)*1000)
+    	await message.edit(content=f":ping_pong: Pong! `{ping}`ms")
 
 
 if __name__ == "__main__":
