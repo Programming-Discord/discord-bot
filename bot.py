@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import time
+import json
 
 #got the Token this way because Python was being stupid and wouldn't import another file and I was too lazy to figure it out XD
 with open('config.json') as f:
