@@ -23,7 +23,7 @@ async def online(ctx):
 	await ctx.send("I am online :D")
 
 @bot.command()
-async def ping(self, ctx):
+async def ping(ctx):
     t1 = time.perf_counter()
     message = await ctx.send("checking ping...")
     t2 = time.perf_counter()
