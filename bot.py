@@ -22,4 +22,13 @@ async def on_ready():
 async def online(ctx):
 	await ctx.send("I am online :D")
 
+@bot.command()
+async def ping(self, ctx):
+    t1 = time.perf_counter()
+    message = await ctx.send("checking ping...")
+    t2 = time.perf_counter()
+    ping = round((t2-t1)*1000)
+    await message.edit(content=f":ping_pong: Pong! `{ping}`ms") 
+
+	
 bot.run(TOKEN)
