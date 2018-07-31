@@ -9,6 +9,9 @@ import asyncio
 bot = commands.Bot(command_prefix="~")
 cogs = {"test"}
 
+def is_owner():
+	return commands.check(lambda ctx: ctx.author.id == 300396755193954306)
+
 @bot.event
 async def on_ready():
 	print('------------------------------------')
@@ -56,7 +59,8 @@ def cleanup_code(content):
 
 
 @bot.command(name='eval', hidden=True)
-@bot.is_owner(ctx.author)
+#default bot.is_owner() wasn't working so I just wrote a custom function
+@is_owner()
 async def _eval(ctx, *, body):
     """Evaluates python code"""
     env = {
