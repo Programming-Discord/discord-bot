@@ -128,6 +128,14 @@ async def _eval(ctx, *, body):
     else:
         await ctx.message.add_reaction('\u2705')
 
+#a really useless command nobody cares about
+@bot.command()
+async def floof(ctx):
+    async with aiohttp.request('GET', 'https://randomfox.ca/floof/') as resp:
+        assert resp.status == 200
+        json = await resp.json()
+    await ctx.send(json["image"])
+    print(json["image"])
 
 if __name__ == "__main__":
     for extension in cogs:
