@@ -14,7 +14,7 @@ import aiohttp
 #got the Token this way because Python was being stupid and wouldn't import another file and I was too lazy to figure it out XD
 bot = commands.Bot(command_prefix="~")
 bot._last_result = None
-cogs = {"test"}
+cogs = {"fun"}
 
 def is_owner():
 	return commands.check(lambda ctx: ctx.author.id == 300396755193954306)
@@ -130,13 +130,7 @@ async def _eval(ctx, *, body):
         await ctx.message.add_reaction('\u2705')
 
 #a really useless command nobody cares about
-@bot.command()
-async def floof(ctx):
-    async with bot.session.get('https://randomfox.ca/floof/') as resp:
-        json = await resp.json()
-    embed = discord.Embed(title="Floof!", color=discord.Color.blue())
-    embed.set_image(url=json["image"])
-    await ctx.send(embed=embed)
+
 
 if __name__ == "__main__":
     for extension in cogs:
