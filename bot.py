@@ -1,12 +1,9 @@
 import discord
 from discord.ext import commands
 import time
-import json
+import os
 
 #got the Token this way because Python was being stupid and wouldn't import another file and I was too lazy to figure it out XD
-with open('config.json') as f:
-	file = json.load(f)
-TOKEN = file["TOKEN"]
 bot = commands.Bot(command_prefix="~")
 cogs = {"test"}
 
@@ -43,4 +40,4 @@ if __name__ == "__main__":
             print('Error on load: {}\n{}'.format(extension, exc))
 
 	
-bot.run(TOKEN)
+bot.run(os.environ.get("TOKEN"))
