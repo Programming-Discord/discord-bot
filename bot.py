@@ -4,6 +4,10 @@ import time
 import os
 from motor.motor_asyncio import AsyncIOMotorClient
 import asyncio
+import io
+import traceback
+from contextlib import redirect_stdout
+import textwrap
 
 #got the Token this way because Python was being stupid and wouldn't import another file and I was too lazy to figure it out XD
 bot = commands.Bot(command_prefix="~")
