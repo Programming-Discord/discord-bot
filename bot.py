@@ -30,6 +30,7 @@ async def on_ready():
 	print('DV: {}'.format(discord.__version__))
 	mongo = AsyncIOMotorClient(os.environ.get("mongo"))
 	bot.db = mongo.programmingdiscordbot
+	bot.session = aiohttp.ClientSession(loop=bot.loop)
 
 @bot.command()
 async def online(ctx):
@@ -131,11 +132,11 @@ async def _eval(ctx, *, body):
 #a really useless command nobody cares about
 @bot.command()
 async def floof(ctx):
-    async with aiohttp.request('GET', 'https://randomfox.ca/floof/') as resp:
-        assert resp.status == 200
+    async with bot.session.get('https://randomfox.ca/floof/') as resp:
         json = await resp.json()
-    await ctx.send(json["image"])
-    print(json["image"])
+    embed = discord.Embed(title="Floof!", color=discord.Color.blue())
+    embed.set_image(url=json["image"])
+    await ctx.send(embed=embed)
 
 if __name__ == "__main__":
     for extension in cogs:
