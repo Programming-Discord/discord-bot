@@ -56,7 +56,7 @@ def cleanup_code(content):
 
 
 @bot.command(name='eval', hidden=True)
-@bot.is_owner()
+@bot.is_owner(ctx.author)
 async def _eval(ctx, *, body):
     """Evaluates python code"""
     env = {
