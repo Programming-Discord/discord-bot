@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import time
 import json
+import aiohttp
 
 #got the Token this way because Python was being stupid and wouldn't import another file and I was too lazy to figure it out XD
 with open('config.json') as f:
@@ -32,6 +33,14 @@ async def ping(ctx):
     ping = round((t2-t1)*1000)
     await message.edit(content=f":ping_pong: Pong! `{ping}`ms")
 
+#how useless of a command is this?
+@bot.command()
+async def floof(ctx):
+    async with aiohttp.request('GET', 'https://randomfox.ca/floof/') as resp:
+        assert resp.status == 200
+        json = await resp.json()
+    await ctx.send(json["image"])
+    print(json["image"])
 
 if __name__ == "__main__":
     for extension in cogs:
