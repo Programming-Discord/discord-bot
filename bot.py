@@ -14,7 +14,7 @@ import aiohttp
 #got the Token this way because Python was being stupid and wouldn't import another file and I was too lazy to figure it out XD
 bot = commands.Bot(command_prefix="~")
 bot._last_result = None
-cogs = {"fun"}
+cogs = {"fun", "ranks"}
 
 def is_owner():
 	return commands.check(lambda ctx: ctx.author.id == 300396755193954306)
