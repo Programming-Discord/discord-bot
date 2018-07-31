@@ -9,7 +9,8 @@ class Ranks():
 	@commands.command()
 	async def ranks(self, ctx):
 		"View all assignable ranks in the server"
-		if ctx.guild.id not in self.bot.db.ranks:
+		ranks = await self.bot.db.ranks.find_one("_id": ctx.guild.id)
+		if not ranks:
 			await ctx.send("This server has no ranks")
 		elif ranks[ctx.guild.id].count_documents() == 0:
 			await ctx.send("This server has no ranks")
