@@ -22,7 +22,7 @@ async def on_ready():
 	print("ID: {}".format(bot.user.id))
 	print('DV: {}'.format(discord.__version__))
 	mongo = AsyncIOMotorClient(os.environ.get("mongo"))
-	bot.db = mongo.discord-bot
+	bot.db = mongo.programmingdiscordbot
 
 @bot.command()
 async def online(ctx):
