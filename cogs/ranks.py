@@ -69,11 +69,9 @@ class Ranks():
 		ranks = server["ranks"]
 		msg = []
 		ids = []
-		x = {}
 		for rank in ranks:
-			x[rank] = ranks[rank]
 			emoji = self.bot.get_emoji(ranks[rank])
-			msg.append(f"{rank}: <:{emoji.name}:{emoji.id}>")
+			msg.append(f"{rank}: <:{emoji.name}:{emoji.id}>\n")
 			ids.append(emoji.id)
 		if not server["rank_channel"]:
 			await ctx.send(f"The rank channel has not been set for this server. Please set it with {ctx.prefix}rank_channel <channel>.")
