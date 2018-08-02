@@ -67,7 +67,7 @@ class Ranks():
 		server = await self.bot.db.ranks.find_one({"_id": ctx.guild.id})
 		rank_channel = self.bot.get_channel(server["rank_channel"])
 		ranks = server["ranks"]
-		msg = ["**Self Assignable Ranks**", "How this works:", "React with the appropriate emoji to get the role, unreact to remove the role"]
+		msg = ["**Self Assignable Ranks**\n", "How this works:\n", "React with the appropriate emoji to get the role, unreact to remove the role\n"]
 		ids = []
 		for rank in ranks:
 			emoji = self.bot.get_emoji(ranks[rank])
