@@ -67,7 +67,7 @@ class Ranks():
 		server = await self.bot.db.ranks.find_one({"_id": ctx.guild.id})
 		rank_channel = self.bot.get_channel(server["rank_channel"])
 		ranks = server["ranks"]
-		msg = []
+		msg = ["**Self Assignable Ranks**", "How this works:", "React with the appropriate emoji to get the role, unreact to remove the role"]
 		ids = []
 		for rank in ranks:
 			emoji = self.bot.get_emoji(ranks[rank])
@@ -76,7 +76,7 @@ class Ranks():
 		if not server["rank_channel"]:
 			await ctx.send(f"The rank channel has not been set for this server. Please set it with {ctx.prefix}rank_channel <channel>.")
 		else:
-			msg = (" ,").join(msg)
+			msg = ("").join(msg)
 			reactions = await rank_channel.send(msg)
 			for id in ids:
 				emoji = self.bot.get_emoji(id)
