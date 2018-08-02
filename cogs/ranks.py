@@ -22,7 +22,7 @@ class Ranks():
 	async def add_rank(self, ctx, emoji_id: int, *, rank: str):
 		"Add an assignable rank to the server"
 		ranks = await self.bot.db.ranks.find_one({"_id": ctx.guild.id})
-		role = discord.utils.find(lambda m: rank.lower() in m.name.lower(), ctx.guild.roles)
+		role = discord.utils.get(ctx.guild.roles, name=rank)
 		if not ranks:
 			await self.bot.db.ranks.insert_one({"_id": ctx.guild.id, "ranks": {}})
 		if role:
