@@ -32,7 +32,7 @@ class Ranks():
 			await ctx.send("That rank already exists")
 		else:
 			await ctx.guild.create_role(name=rank)
-			await self.bot.db.ranks.update_one({"_id": ctx.guild.id}, {"$set": {f"ranks.{str(role.name)}": emoji_id}})
+			await self.bot.db.ranks.update_one({"_id": ctx.guild.id}, {"$set": {f"ranks.{rank}": emoji_id}})
 			await ctx.send(f"I created and added {rank} as a rank")
 
 	@commands.command()
