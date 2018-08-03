@@ -11,10 +11,19 @@ import textwrap
 import inspect
 import aiohttp
 
+async def get_prefix(bot, message):
+    server = await bot.db.config.find_one({"_id": message.guild.id})
+    if not server or "prefix" not in server:
+        if bot.user.id == 473943707213889568:
+            return "test."
+        elif bot.user.id == 473565271106256896:
+            return "~"
+    else:
+        return server["prefix"]
 #got the Token this way because Python was being stupid and wouldn't import another file and I was too lazy to figure it out XD
 bot = commands.Bot(command_prefix="~")
 bot._last_result = None
-cogs = {"fun", "ranks"}
+cogs = {"fun", "ranks", "config"}
 
 def is_owner():
 	return commands.check(lambda ctx: ctx.author.id == 300396755193954306)
@@ -31,6 +40,49 @@ async def on_ready():
 	mongo = AsyncIOMotorClient(os.environ.get("mongo"))
 	bot.db = mongo.programmingdiscordbot
 	bot.session = aiohttp.ClientSession(loop=bot.loop)
+
+#Welcome and leave message handling
+@bot.event
+async def on_member_join(member):
+    server = await bot.db.config.find_one({"_id": member.guild.id})
+    if not server:
+        pass
+    elif server["channel"]:
+        channel = bot.get_channel(server["welcome/leave_channel"])
+        message = server["welcome_message"]
+        formatting = {"server_name": member.guild.name, "member_count": len(member.guild.members), "member_name": member.name, "member_mention": member.mention}
+        for x in formatting:
+            if x in message:
+                message = message.replace(x, str(formatting[x]))
+        await channel.send(message)
+
+@bot.event
+async def on_member_remove(member):
+    server = await bot.db.config.find_one({"_id": member.guild.id})
+    if not server:
+        pass
+    elif server["channel"]:
+        channel = bot.get_channel(server["welcome/leave_channel"])
+        message = server["leave_message"]
+        formatting = {"server_name": member.guild.name, "member_count": len(member.guild.members), "member_name": member.name, "member_mention": member.mention}
+        for x in formatting:
+            if x in message:
+                message = message.replace(x, str(formatting[x]))
+        await channel.send(message)
+
+#Error handling
+@bot.event
+async def on_command_error(ctx, error):
+    print(error)
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f"`Usage: {ctx.prefix + ctx.command.signature}`")
+        print('Sent command help')
+    elif isinstance(error, commands.DisabledCommand):
+        await ctx.send("That command is disabled.")
+        print('Command disabled.')
+    elif isinstance(error, commands.NotOwner):
+        await ctx.send("You're not a developer silly")
+        print("Attemepted dev command by non-dev")
 
 @bot.command()
 async def online(ctx):
@@ -129,7 +181,6 @@ async def _eval(ctx, *, body):
     else:
         await ctx.message.add_reaction('\u2705')
 
-#a really useless command nobody cares about
 
 
 if __name__ == "__main__":
