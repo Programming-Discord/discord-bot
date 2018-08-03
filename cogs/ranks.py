@@ -78,9 +78,36 @@ class Ranks():
 		else:
 			msg = ("").join(msg)
 			reactions = await rank_channel.send(msg)
+			await self.bot.db.ranks.update_one({"_id": ctx.guild.id}, {"$set": {"message_id": reactions.id}})
 			for id in ids:
 				emoji = self.bot.get_emoji(id)
 				await reactions.add_reaction(emoji)
+
+	@commands.command()
+	@commands.has_permissions(manage_guild=True)
+	async def edit_ranks(self, ctx, option, emoji_id: int, *, rank: str):
+		server = await self.bot.db.ranks.find_one({"_id": ctx.guild.id})
+		channel = self.bot.get_channel(server["rank_channel"])
+		if not server["message_id"]:
+			await ctx.send("No message id was set. ~start_ranks must be ran first.")
+		else:
+			message_id = server["message_id"]
+			message = await channel.get_message(message_id)
+			emoji = self.bot.get_emoji(emoji_id)
+			if option == "add":
+				await ctx.invoke(self.bot.get_command('add_rank'), emoji_id=emoji_id, rank=rank)
+				await message.edit(content=f"{message.content}\n{rank}: <:{emoji.name}:{emoji_id}>")
+				await message.add_reaction(emoji)
+			elif option == "remove":
+				await ctx.invoke(self.bot.get_command("remove_rank"), rank=rank)
+				await message.edit(content=message.content.replace(f"\n{rank}: <:{emoji.name}:{emoji_id}>", ""))
+				for reaction in message.reactions:
+					if reaction.emoji.id == emoji_id:
+						async for user in reaction.users():
+							await message.remove_reaction(emoji, user)
+			else:
+				await ctx.send("The two options for edit_ranks is add and remove")
+			await ctx.send("Succesfully edited the rank message")
 
 	
 	#Events upon reactions
