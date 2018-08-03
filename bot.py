@@ -21,7 +21,7 @@ async def get_prefix(bot, message):
     else:
         return server["prefix"]
 #got the Token this way because Python was being stupid and wouldn't import another file and I was too lazy to figure it out XD
-bot = commands.Bot(command_prefix="~")
+bot = commands.Bot(command_prefix=get_prefix)
 bot._last_result = None
 cogs = {"fun", "ranks", "config"}
 
