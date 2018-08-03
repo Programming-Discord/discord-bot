@@ -14,7 +14,7 @@ import aiohttp
 #got the Token this way because Python was being stupid and wouldn't import another file and I was too lazy to figure it out XD
 bot = commands.Bot(command_prefix="~")
 bot._last_result = None
-cogs = {"test"}
+cogs = {"fun", "ranks"}
 
 def is_owner():
 	return commands.check(lambda ctx: ctx.author.id == 300396755193954306)
@@ -30,6 +30,7 @@ async def on_ready():
 	print('DV: {}'.format(discord.__version__))
 	mongo = AsyncIOMotorClient(os.environ.get("mongo"))
 	bot.db = mongo.programmingdiscordbot
+	bot.session = aiohttp.ClientSession(loop=bot.loop)
 
 @bot.command()
 async def online(ctx):
@@ -127,6 +128,8 @@ async def _eval(ctx, *, body):
         await ctx.message.add_reaction('\u2049')  # x
     else:
         await ctx.message.add_reaction('\u2705')
+
+#a really useless command nobody cares about
 
 
 if __name__ == "__main__":
