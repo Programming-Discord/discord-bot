@@ -81,17 +81,13 @@ async def on_command_error(ctx, error):
         await ctx.send("That command is disabled.")
         print('Command disabled.')
     elif isinstance(error, commands.NotOwner):
-        await ctx.send("You're not a developer silly")
+        await ctx.send("You have to be a dev to use this command!")
         print("Attemepted dev command by non-dev")
-
-@bot.command()
-async def online(ctx):
-	await ctx.send("I am online :D")
 
 @bot.command()
 async def ping(ctx):
     t1 = time.perf_counter()
-    message = await ctx.send("checking ping...")
+    message = await ctx.send("Checking ping...")
     t2 = time.perf_counter()
     ping = round((t2-t1)*1000)
     await message.edit(content=f":ping_pong: Pong! `{ping}`ms")
