@@ -129,7 +129,7 @@ class Ranks():
 					role = discord.utils.get(channel.guild.roles, name=rank)
 					await channel.guild.get_member(payload.user_id).remove_roles(role, reason="selfrole")
 					
-	async def on_messsage(self, message):
+	async def on_message(self, message):
 		if message.content.startswith("?rank"):
 			await message.channel.send("Please get your ranks from #bot-role-assignment")
 
