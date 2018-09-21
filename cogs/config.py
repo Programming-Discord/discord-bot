@@ -27,8 +27,15 @@ class Config():
 				text = ctx.prefix
 			await self.bot.db.config.update_one({"_id": ctx.guild.id}, {"$set": {"prefix": text}})
 			await ctx.send(f"Succesfully changed the bot's prefix to {text}")
+		elif option == "mod_log":
+			text = text.lstrip("<#").strip(">")
+			if self.bot.get_channel(int(text)):
+				await self.bot.db.config.update_one({"_id": ctx.guild.id}, {"$set": {"mod_log": int(text)}})
+				await ctx.send(f"Succesfully changed the mod log channel to <#{text}>")
+			else:
+				await ctx.send("That's not a valid channel. Please type the whole channel, not just the id or name.")
 		else:
-			await ctx.send("That's an invalid option. The current config option's are prefix, welcome_message, leave_message, and welcome/leave_channel")
+			await ctx.send("That's an invalid option. The current config option's are prefix, welcome_message, leave_message, welcome/leave_channel, and mod_log")
 
 	@commands.command(aliases=["welcome/leave_channel"])
 	@commands.has_permissions(manage_guild=True)

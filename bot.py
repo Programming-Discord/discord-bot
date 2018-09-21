@@ -24,7 +24,7 @@ async def get_prefix(bot, message):
 bot = commands.Bot(command_prefix=get_prefix)
 bot._last_result = None
 
-cogs = {"fun", "ranks", "config"}
+cogs = {"fun", "ranks", "config", "mod"}
 
 @bot.event
 async def on_ready():
