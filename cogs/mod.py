@@ -35,7 +35,7 @@ class Mod():
 			user = ctx.guild.get_member(int(user))
 		try:
 			await user.ban(reason=reason)
-		except: discord.Forbidden(
+		except: discord.Forbidden()
 			await ctx.send("I don't have the proper permissions to ban this member")
 		await ctx.send(f"**{user} was banned**")
 		if mod_log["mod_log"]:
