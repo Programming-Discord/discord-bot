@@ -119,6 +119,55 @@ class Mod():
 		except discord.Forbidden():
 			await ctx.send("I don't have the proper permissions to delete messages.")
 
+	@commands.command()
+	@commands.has_permissions(kick_members=True)
+	async def mute(self, ctx, user, time, *, reason):
+		mod_log = await self.bot.db.config.find_one({"_id": ctx.guild.id})
+		if user.startswith("<@") and user.endswith(">"):
+			user = ctx.guild.get_member(int(user.lstrip("<@").strip(">")))
+		else:
+			user = ctx.guild.get_member(int(user))
+		try:
+			await ctx.send(f'{user} has been muted')
+			if mod_log["mod_log"]:
+					channel = self.bot.get_channel(mod_log["mod_log"])
+					embed = discord.Embed(title="Member muted!", color=discord.Color.red(), description=f"{user} was muted by {ctx.author}")
+					embed.add_field(name="Length", value=time)
+					embed.add_field(name="Reason", value=reason)
+					embed.set_image(url=user.avatar_url)
+					await channel.send(embed=embed)
+			for channel in ctx.guild.channels:
+				overwrite = discord.PermissionOverwrite()
+				overwrite.send_messages = False
+				await channel.set_permissions(user, overwrite=overwrite)
+			if str(time) != "infinite":
+				time = int(time) * 60
+				await asyncio.sleep(time)
+				await ctx.invoke(self.bot.get_command("unmute"), user=str(user.id), reason="Time Expired")
+		except discord.Forbidden:
+			await ctx.send("I don't have the proper permissions to delete this user.")
+
+	@commands.command()
+	@commands.has_permissions(kick_members=True)
+	async def unmute(self, ctx, user, *, reason):
+		mod_log = await self.bot.db.config.find_one({"_id": ctx.guild.id})
+		if user.startswith("<@") and user.endswith(">"):
+			user = ctx.guild.get_member(int(user.lstrip("<@").strip(">")))
+		else:
+			user = ctx.guild.get_member(int(user))
+		try:
+			for channel in ctx.guild.channels:
+				await channel.set_permissions(user, overwrite=None)
+			await ctx.send(f'{user} has been unmuted')
+		except discord.Forbidden:
+			await ctx.send("I don't have the proper permissions to delete this user.")
+		if mod_log["mod_log"]:
+			channel = self.bot.get_channel(mod_log["mod_log"])
+			embed = discord.Embed(title="Member unmuted!", color=discord.Color.red(), description=f"{user} was unmuted")
+			embed.add_field(name="Reason", value=reason)
+			embed.set_image(url=user.avatar_url)
+			await channel.send(embed=embed)
+
 
 
 
