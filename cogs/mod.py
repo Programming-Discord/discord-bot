@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+import asyncio
 
 class Mod():
 	def __init__(self, bot):
@@ -105,6 +106,18 @@ class Mod():
 				await ctx.send(f"Succesfully removed the warning from {user}")
 			else:
 				await ctx.send("That user has never been warned for that")
+
+	@commands.command()
+	@commands.has_permissions(manage_messages=True)
+	async def purge(self, ctx, num: int):
+		try:
+			await ctx.message.delete()
+			await ctx.channel.purge(limit=num)
+			resp = await ctx.send(f"Succesfully deleted {num} messages.")
+			await asyncio.sleep(5)
+			await resp.delete()
+		except discord.Forbidden():
+			await ctx.send("I don't have the proper permissions to delete messages.")
 
 
 
