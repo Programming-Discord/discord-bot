@@ -55,7 +55,7 @@ class Mod():
 			user = ctx.guild.get_member(int(user))
 		warns = await self.bot.db.warns.find_one({"_id": user.id})
 		if not warns:
-			await self.bot.db.warns.insert_one({"_id": ctx.author.id})
+			await self.bot.db.warns.insert_one({"_id": user.id})
 			warns = [reason]
 		else:
 			warns = warns["warnings"]
