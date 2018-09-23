@@ -64,7 +64,7 @@ class Fun():
 				  "Quiero desnudarte a besos despacito\nFirmo en las paredes de tu laberinto\nY hacer de tu cuerpo todo un manuscrito\n(Sube, sube, sube, Sube, sube)"]
 			await message.channel.send("`Now Playing: Luis Fonsi - Despacito ft. Daddy Yankee ⚪────────────── ◄◄⠀▶⠀►►⠀ 00:00 / 4:42 ⠀ ───○ 🔊⚙️`")
 			for line in lyrics:
-				await asyncio.sleep(2.5)
+				await asyncio.sleep(4)
 				await message.channel.send(line)
 		
 
