@@ -86,7 +86,7 @@ async def on_command_error(ctx, error):
         print('Command disabled.')
     elif isinstance(error, commands.NotOwner):
         await ctx.send("You have to be a dev to use this command!")
-        print("Attemepted dev command by non-dev")
+        print("Attempted dev command by non-dev")
 
 @bot.command()
 async def ping(ctx):
