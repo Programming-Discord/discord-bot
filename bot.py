@@ -48,17 +48,14 @@ def is_owner():
 #Welcome and leave message handling
 @bot.event
 async def on_member_join(member):
-    server = await bot.db.config.find_one({"_id": member.guild.id})
-    if not server:
-        pass
-    elif server["channel"]:
-        channel = bot.get_channel(server["welcome/leave_channel"])
-        message = server["welcome_message"]
-        formatting = {"server_name": member.guild.name, "member_count": len(member.guild.members), "member_name": member.name, "member_mention": member.mention}
-        for x in formatting:
-            if x in message:
-                message = message.replace(x, str(formatting[x]))
-        await channel.send(message)
+    
+    verif = bot.get_channel(587046269437083658)
+    staff = bot.get_channel(367470377947103235)
+    await verif.send(f"Hello {member.mention}. Due to recent attacks on the server every user must be verified before they are allowed to chat and be active in the community. The staff will be notified of your arrival and will be here to verify you shortly. Thank you for your patience and understanding.\n -Programming Discord Staff")
+    await staff.send(f"Attention @Staff. {member.name}{member.discriminator} has joined the server and needs verification. Their account was created at {member.created_at}. Keep this in mind when verifying this user.")
+    await member.add_roles(discord.utils.get(member.guild.roles, name="Unverified")
+
+    
 
 @bot.event
 async def on_member_remove(member):
@@ -116,7 +113,23 @@ def cleanup_code(content):
         return '\n'.join(content.split('\n')[1:-1])
     return content.strip('` \n')
 
-
+@bot.command()
+async def verify(ctx, member: discord.Member):
+    server = await bot.db.config.find_one({"_id": member.guild.id})
+    staff = discord.utils.get(member.guild.roles, name="Staff")
+    if staff in ctx.author.roles:
+        await member.remove_roles(discord.utils.get(member.guild.roles, name="Unverified"))
+        await member.add_roles(discord.utils.get(member.guild.roles, name="Member"))
+        if not server:
+            pass
+        elif server["channel"]:
+            channel = bot.get_channel(server["welcome/leave_channel"])
+            message = server["welcome_message"]
+            formatting = {"server_name": member.guild.name, "member_count": len(member.guild.members), "member_name": member.name, "member_mention": member.mention}
+            for x in formatting:
+                if x in message:
+                    message = message.replace(x, str(formatting[x]))
+            await channel.send(message)
 
 @bot.command(name='eval', hidden=True)
 async def _eval(ctx, *, body):
