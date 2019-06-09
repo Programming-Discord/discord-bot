@@ -53,7 +53,7 @@ async def on_member_join(member):
     staff = bot.get_channel(367470377947103235)
     await verif.send(f"Hello {member.mention}. Due to recent attacks on the server every user must be verified before they are allowed to chat and be active in the community. The staff will be notified of your arrival and will be here to verify you shortly. Thank you for your patience and understanding.\n -Programming Discord Staff")
     await staff.send(f"Attention @Staff. {member.name}{member.discriminator} has joined the server and needs verification. Their account was created at {member.created_at}. Keep this in mind when verifying this user.")
-    await member.add_roles(discord.utils.get(member.guild.roles, name="Unverified")
+    await member.add_roles(discord.utils.get(member.guild.roles, name="Unverified"))
 
     
 
