@@ -48,12 +48,24 @@ def is_owner():
 #Welcome and leave message handling
 @bot.event
 async def on_member_join(member):
-    
+    server = await bot.db.config.find_one({"_id": member.guild.id})
     verif = bot.get_channel(587046269437083658)
     staff = bot.get_channel(367470377947103235)
-    await member.add_roles(discord.utils.get(member.guild.roles, name="Unverified"))
-    await verif.send(f"Hello {member.mention}. Due to recent attacks on the server every user must be verified before they are allowed to chat and be active in the community. The staff will be notified of your arrival and will be here to verify you shortly. Thank you for your patience and understanding.\n -Programming Discord Staff")
-    await staff.send(f"Attention <@&369970330531528705>. {member.name}#{member.discriminator} has joined the server and needs verification. Their account was created at {member.created_at.__format__('%A, %d. %B %Y')}. Keep this in mind when verifying this user.")
+    if server["verification"] == True:
+        await member.add_roles(discord.utils.get(member.guild.roles, name="Unverified"))
+        await verif.send(f"Hello {member.mention}. Due to recent attacks on the server every user must be verified before they are allowed to chat and be active in the community. The staff will be notified of your arrival and will be here to verify you shortly. Thank you for your patience and understanding.\n -Programming Discord Staff")
+        await staff.send(f"Attention <@&369970330531528705>. {member.name}#{member.discriminator} has joined the server and needs verification. Their account was created at {member.created_at.__format__('%A, %d. %B %Y')}. Keep this in mind when verifying this user.")
+    else:
+        if not server:
+            pass
+        elif server["channel"]:
+            channel = bot.get_channel(server["welcome/leave_channel"])
+            message = server["welcome_message"]
+            formatting = {"server_name": member.guild.name, "member_count": len(member.guild.members), "member_name": member.name, "member_mention": member.mention}
+            for x in formatting:
+                if x in message:
+                    message = message.replace(x, str(formatting[x]))
+            await channel.send(message)
 
     
 
@@ -131,6 +143,21 @@ async def verify(ctx, member: discord.Member):
                 if x in message:
                     message = message.replace(x, str(formatting[x]))
             await channel.send(message)
+
+@bot.command()
+async def toggle_verify(ctx):
+    server = await bot.db.config.find_one({"_id": ctx.author.guild.id})
+    mod = discord.utils.get(ctx.author.guild.roles, name="Moderator")
+    if mod in ctx.author.roles:
+        if not server["verification"]:
+            await bot.db.config.update_one({"_id": ctx.author.guild.id}, {"$set": {"verification": True}})
+            await ctx.send("Verification has been enabled for the server. Run ~toggle_verify again to disable it")
+        elif server["verification"] == True:
+            await bot.db.config.update_one({"_id": ctx.author.guild.id}, {"$set": {"verification": False}})
+            await ctx.send("Verification has been disabled for the server. Run ~toggle_verify again to enable it")
+        elif server["verification"] == False:
+            await bot.db.config.update_one({"_id": ctx.author.guild.id}, {"$set": {"verification": True}})
+            await ctx.send("Verification has been enabled for the server. Run ~toggle_verify again to disable it")
 
 @bot.command(name='eval', hidden=True)
 async def _eval(ctx, *, body):
