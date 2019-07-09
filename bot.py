@@ -149,7 +149,7 @@ async def toggle_verify(ctx):
     server = await bot.db.config.find_one({"_id": ctx.author.guild.id})
     mod = discord.utils.get(ctx.author.guild.roles, name="Moderator")
     if mod in ctx.author.roles:
-        if not server["verification"]:
+        if "verification" not in server:
             await bot.db.config.update_one({"_id": ctx.author.guild.id}, {"$set": {"verification": True}})
             await ctx.send("Verification has been enabled for the server. Run ~toggle_verify again to disable it")
         elif server["verification"] == True:
