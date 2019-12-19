@@ -111,6 +111,7 @@ class Ranks(commands.Cog):
 
 	
 	#Events upon reactions
+	@commands.Cog.listener()
 	async def on_raw_reaction_add(self, payload):
 		server = await self.bot.db.ranks.find_one({"_id": payload.guild_id})
 		channel = self.bot.get_channel(payload.channel_id)
