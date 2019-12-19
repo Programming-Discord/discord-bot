@@ -119,7 +119,7 @@ class Ranks(commands.Cog):
 				if server["ranks"][rank] == payload.emoji.id:
 					role = discord.utils.get(channel.guild.roles, name=rank)
 					await channel.guild.get_member(payload.user_id).add_roles(role, reason="selfrole")
-
+	@commands.Cog.listener()
 	async def on_raw_reaction_remove(self, payload):
 		server = await self.bot.db.ranks.find_one({"_id": payload.guild_id})
 		channel = self.bot.get_channel(payload.channel_id)
@@ -128,7 +128,7 @@ class Ranks(commands.Cog):
 				if server["ranks"][rank] == payload.emoji.id:
 					role = discord.utils.get(channel.guild.roles, name=rank)
 					await channel.guild.get_member(payload.user_id).remove_roles(role, reason="selfrole")
-					
+	@commands.Cog.listener()				
 	async def on_message(self, message):
 		if message.content.startswith("?rank"):
 			await message.channel.send("Please get your ranks from #bot-role-assignment")
