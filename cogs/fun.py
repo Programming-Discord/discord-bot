@@ -53,6 +53,7 @@ class Fun(commands.Cog):
 		embed.set_image(url=json["url"])
 		await ctx.send(embed=embed)
 		
+	@commands.Cog.listener()	
 	async def on_message(self, message):
 		if "alexa play despacito" in message.content:
 			lyrics = ["Ay, ¡Fonsi! ¡D.Y.!\nOhhh, oh, no, oh, no, oh'\nHey, yeah!\nDididiri Daddy, go!", 
