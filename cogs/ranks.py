@@ -92,7 +92,7 @@ class Ranks(commands.Cog):
 			await ctx.send("No message id was set. ~start_ranks must be ran first.")
 		else:
 			message_id = server["message_id"]
-			message = await channel.get_message(message_id)
+			message = await channel.fetch_message(message_id)
 			emoji = self.bot.get_emoji(emoji_id)
 			if option == "add":
 				await ctx.invoke(self.bot.get_command('add_rank'), emoji_id=emoji_id, rank=rank)
