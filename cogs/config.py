@@ -20,7 +20,7 @@ class Config(commands.Cog):
 			await ctx.send(f"Succesfully changed the leave message to {text}")
 		elif option == "welcome/leave_channel":
 			text = text.replace("<", "").replace("#", "").replace(">", "")
-			await self.bot.db.config.update_one({"_id": ctx.guild.id}, {"$set": {"welcome/leave_channel": int(text)}, "channel": True})
+			await self.bot.db.config.update_one({"_id": ctx.guild.id}, {"$set": {"welcome/leave_channel": int(text), "channel": True}})
 			await ctx.send(f"Succesfully changed the welcome/leave channel to {text}")
 		elif option == "prefix":
 			if text == None:
