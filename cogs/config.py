@@ -13,14 +13,14 @@ class Config(commands.Cog):
 		if not server:
 			await self.bot.db.config.insert_one({"_id": ctx.guild.id})
 		if option == "welcome_message":
-			await self.bot.db.config.update_one({"_id": ctx.guild.id}, {"$set": {"welcome_message": text, channel: True}})
+			await self.bot.db.config.update_one({"_id": ctx.guild.id}, {"$set": {"welcome_message": text, "channel": True}})
 			await ctx.send(f"Succesfully changed the welcome message to {text}")
 		elif option == "leave_message":
-			await self.bot.db.config.update_one({"_id": ctx.guild.id}, {"$set": {"leave_message": text, channel: True}})
+			await self.bot.db.config.update_one({"_id": ctx.guild.id}, {"$set": {"leave_message": text, "channel": True}})
 			await ctx.send(f"Succesfully changed the leave message to {text}")
 		elif option == "welcome/leave_channel":
 			text = text.replace("<", "").replace("#", "").replace(">", "")
-			await self.bot.db.config.update_one({"_id": ctx.guild.id}, {"$set": {"welcome/leave_channel": int(text)}, channel: True})
+			await self.bot.db.config.update_one({"_id": ctx.guild.id}, {"$set": {"welcome/leave_channel": int(text)}, "channel": True})
 			await ctx.send(f"Succesfully changed the welcome/leave channel to {text}")
 		elif option == "prefix":
 			if text == None:
