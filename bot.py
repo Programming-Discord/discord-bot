@@ -39,7 +39,7 @@ async def on_ready():
     print("ID: {}".format(bot.user.id))
     print('DV: {}'.format(discord.__version__))
     mongo = AsyncIOMotorClient(config["mongo"])
-    bot.db = mongo.programmingdiscordbot
+    bot.db = mongo.discord-bot
     bot.session = aiohttp.ClientSession(loop=bot.loop)
 
 def is_owner():
