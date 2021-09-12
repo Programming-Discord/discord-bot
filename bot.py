@@ -10,6 +10,7 @@ from contextlib import redirect_stdout
 import textwrap
 import inspect
 import aiohttp
+import json
 
 async def get_prefix(bot, message):
     server = await bot.db.config.find_one({"_id": message.guild.id})
@@ -20,9 +21,11 @@ async def get_prefix(bot, message):
             return "~"
     else:
         return server["prefix"]
-#got the Token this way because Python was being stupid and wouldn't import another file and I was too lazy to figure it out XD
+
 bot = commands.Bot(command_prefix=get_prefix)
 bot._last_result = None
+with open("config.json") as f:
+    config = json.load(f)
 
 cogs = {"fun", "ranks", "config", "mod"}
 
@@ -35,7 +38,7 @@ async def on_ready():
     print('Author: The Programming Discord :D')
     print("ID: {}".format(bot.user.id))
     print('DV: {}'.format(discord.__version__))
-    mongo = AsyncIOMotorClient(os.environ.get("mongo"))
+    mongo = AsyncIOMotorClient(config["mongo"])
     bot.db = mongo.programmingdiscordbot
     bot.session = aiohttp.ClientSession(loop=bot.loop)
 
@@ -255,4 +258,4 @@ if __name__ == "__main__":
             print('Error on load: {}\n{}'.format(extension, exc))
 
 	
-bot.run(os.environ.get("TOKEN"))
+bot.run(config["token"])
