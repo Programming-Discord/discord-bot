@@ -22,7 +22,9 @@ async def get_prefix(bot, message):
     else:
         return server["prefix"]
 
-bot = commands.Bot(command_prefix=get_prefix)
+intents = discord.Intents.default()
+intents.members = True
+bot = commands.Bot(command_prefix=get_prefix, intents=intents)
 bot._last_result = None
 with open("config.json") as f:
     config = json.load(f)
